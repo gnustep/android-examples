@@ -14,6 +14,10 @@ android {
                 cppFlags ""
             }
         }
+        ndk {
+            // GNUstep currently supports armeabi-v7a only
+            abiFilters "armeabi-v7a"
+        }
     }
     buildTypes {
         release {

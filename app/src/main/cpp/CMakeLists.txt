@@ -5,6 +5,18 @@
 
 cmake_minimum_required(VERSION 3.4.1)
 
+# Define list of Objective-C/C++ files
+
+set(objectivec_SRCS ObjectiveCTest.mm)
+
+# Set up Objective-C suppport via GNUstep
+
+set(objectivec_COMPILE_FLAGS "-I$ENV{HOME}/Library/Android/GNUstep/include -fexceptions -fobjc-exceptions -D_NATIVE_OBJC_EXCEPTIONS -pthread -fPIC -DGSWARN -DGSDIAGNOSE -fobjc-runtime=gnustep-2.0 -fblocks -fconstant-string-class=NSConstantString")
+set(objectivec_LINK_OPTIONS "-L$ENV{HOME}/Library/Android/GNUstep/lib -lgnustep-base -lobjc -ldispatch -lBlocksRuntime -lm")
+
+set_property(SOURCE ${objectivec_SRCS}
+        APPEND_STRING PROPERTY COMPILE_FLAGS ${objectivec_COMPILE_FLAGS})
+
 # Creates and names a library, sets it as either STATIC
 # or SHARED, and provides the relative paths to its source code.
 # You can define multiple libraries, and CMake builds them for you.
@@ -17,7 +29,7 @@ add_library( # Sets the name of the library.
         SHARED
 
         # Provides a relative path to your source file(s).
-        native-lib.cpp)
+        native-lib.cpp ${objectivec_SRCS})
 
 # Searches for a specified prebuilt library and stores the path as a
 # variable. Because CMake includes system libraries in the search path by
@@ -41,4 +53,14 @@ target_link_libraries( # Specifies the target library.
 
         # Links the target library to the log library
         # included in the NDK.
-        ${log-lib})
+        ${log-lib}
+
+        # Add linker options for GNUstep
+        ${objectivec_LINK_OPTIONS})
+
+# Copy GNUstep libraries into output directory to be bundled with the app.
+
+add_custom_command(TARGET native-lib POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy
+        $ENV{HOME}/Library/Android/GNUstep/lib/*.so
+        ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/)
