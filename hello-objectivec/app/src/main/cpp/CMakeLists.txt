@@ -7,11 +7,11 @@ cmake_minimum_required(VERSION 3.4.1)
 
 # Define list of Objective-C/C++ files
 
-set(objectivec_SRCS ObjectiveCTest.mm)
+set(objectivec_SRCS GSInitialize.m ObjectiveCTest.mm)
 
 # Set up Objective-C suppport via GNUstep
 
-set(objectivec_COMPILE_FLAGS "-I$ENV{HOME}/Library/Android/GNUstep/include -fexceptions -fobjc-exceptions -D_NATIVE_OBJC_EXCEPTIONS -pthread -fPIC -DGSWARN -DGSDIAGNOSE -fobjc-runtime=gnustep-2.0 -fblocks -fconstant-string-class=NSConstantString")
+set(objectivec_COMPILE_FLAGS "-I$ENV{HOME}/Library/Android/GNUstep/include -fexceptions -fobjc-exceptions -D_NATIVE_OBJC_EXCEPTIONS -pthread -fPIC -DGSWARN -DGSDIAGNOSE -fobjc-runtime=gnustep-2.0 -fobjc-arc -fblocks -fconstant-string-class=NSConstantString")
 set(objectivec_LINK_OPTIONS "-L$ENV{HOME}/Library/Android/GNUstep/lib -lgnustep-base -lobjc -ldispatch -lBlocksRuntime -lm")
 
 set_property(SOURCE ${objectivec_SRCS}
