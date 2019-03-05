@@ -2,6 +2,7 @@ package com.example.helloobjectivec;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
@@ -21,10 +22,15 @@ public class MainActivity extends AppCompatActivity {
 		tv.setText(stringFromObjectiveC());
 	}
 
+	void onThrowObjectiveCException(View v) {
+		throwObjectiveCException();
+	}
+
 	/**
 	 * A native method that is implemented by the 'native-lib' native library,
 	 * which is packaged with this application.
 	 */
 	public native String stringFromJNI();
 	public native String stringFromObjectiveC();
+	public native void throwObjectiveCException();
 }
