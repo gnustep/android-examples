@@ -7,15 +7,33 @@ cmake_minimum_required(VERSION 3.4.1)
 
 # Define list of Objective-C/C++ files
 
-set(objectivec_SRCS GSInitialize.m ObjectiveCTest.mm)
+set(OBJECTIVEC_SRCS GSInitialize.m ObjectiveCTest.mm)
 
 # Set up Objective-C suppport via GNUstep
 
-set(objectivec_COMPILE_FLAGS "-I$ENV{HOME}/Library/Android/GNUstep/include -fexceptions -fobjc-exceptions -D_NATIVE_OBJC_EXCEPTIONS -pthread -fPIC -DGSWARN -DGSDIAGNOSE -fobjc-runtime=gnustep-2.0 -fobjc-arc -fblocks -fconstant-string-class=NSConstantString")
-set(objectivec_LINK_OPTIONS "-L$ENV{HOME}/Library/Android/GNUstep/lib -lgnustep-base -lobjc -ldispatch -lBlocksRuntime -lm")
+set(GNUSTEP_PATH "$ENV{HOME}/Library/Android/GNUStep")
+set(GNUSTEP_CONFIG "${GNUSTEP_PATH}/bin/gnustep-config")
 
-set_property(SOURCE ${objectivec_SRCS}
-        APPEND_STRING PROPERTY COMPILE_FLAGS ${objectivec_COMPILE_FLAGS})
+# get options from gnustep-config
+execute_process(COMMAND ${GNUSTEP_CONFIG} --debug-flags # or --objc-flags
+        OUTPUT_VARIABLE OBJECTIVEC_COMPILE_FLAGS
+        OUTPUT_STRIP_TRAILING_WHITESPACE)
+execute_process(COMMAND ${GNUSTEP_CONFIG} --base-libs
+        OUTPUT_VARIABLE OBJECTIVEC_LINK_OPTIONS
+        OUTPUT_STRIP_TRAILING_WHITESPACE)
+execute_process(COMMAND ${GNUSTEP_CONFIG} --variable=GNUSTEP_SYSTEM_LIBRARIES
+        OUTPUT_VARIABLE OBJECTIVEC_LIBRARIES_DIR
+        OUTPUT_STRIP_TRAILING_WHITESPACE)
+
+# enable Automatic Reference Counting
+set(OBJECTIVEC_COMPILE_FLAGS "${OBJECTIVEC_COMPILE_FLAGS} -fobjc-arc")
+
+# add libdispatch
+set(OBJECTIVEC_LINK_OPTIONS "${OBJECTIVEC_LINK_OPTIONS} -ldispatch -lBlocksRuntime")
+
+# set compile flags on Objective-C/C++ files
+set_property(SOURCE ${OBJECTIVEC_SRCS}
+        APPEND_STRING PROPERTY COMPILE_FLAGS ${OBJECTIVEC_COMPILE_FLAGS})
 
 # Creates and names a library, sets it as either STATIC
 # or SHARED, and provides the relative paths to its source code.
@@ -29,7 +47,7 @@ add_library( # Sets the name of the library.
         SHARED
 
         # Provides a relative path to your source file(s).
-        native-lib.cpp ${objectivec_SRCS})
+        native-lib.cpp ${OBJECTIVEC_SRCS})
 
 # Searches for a specified prebuilt library and stores the path as a
 # variable. Because CMake includes system libraries in the search path by
@@ -56,11 +74,11 @@ target_link_libraries( # Specifies the target library.
         ${log-lib}
 
         # Add linker options for GNUstep
-        ${objectivec_LINK_OPTIONS})
+        ${OBJECTIVEC_LINK_OPTIONS})
 
 # Copy GNUstep libraries into output directory to be bundled with the app.
 
 add_custom_command(TARGET native-lib POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy
-        $ENV{HOME}/Library/Android/GNUstep/lib/*.so
+        ${OBJECTIVEC_LIBRARIES_DIR}/*.so
         ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/)
