@@ -22,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
 		tv.setText(stringFromObjectiveC());
 	}
 
-	void onThrowObjectiveCException(View v) {
+	public void onThrowObjectiveCException(View v) {
 		throwObjectiveCException();
 	}
 
