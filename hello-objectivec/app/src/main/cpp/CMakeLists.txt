@@ -11,8 +11,8 @@ set(OBJECTIVEC_SRCS GSInitialize.m ObjectiveCTest.mm)
 
 # Set up Objective-C suppport via GNUstep
 
-set(GNUSTEP_PATH "$ENV{HOME}/Library/Android/GNUStep")
-set(GNUSTEP_CONFIG "${GNUSTEP_PATH}/bin/gnustep-config")
+set(GNUSTEP_HOME "$ENV{HOME}/Library/Android/GNUStep")
+set(GNUSTEP_CONFIG "${GNUSTEP_HOME}/bin/gnustep-config")
 
 # get options from gnustep-config
 execute_process(COMMAND ${GNUSTEP_CONFIG} --debug-flags # or --objc-flags
