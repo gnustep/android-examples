@@ -14,6 +14,12 @@ set(OBJECTIVEC_SRCS GSInitialize.m ObjectiveCTest.mm)
 set(GNUSTEP_HOME "$ENV{HOME}/Library/Android/GNUStep")
 set(GNUSTEP_CONFIG "${GNUSTEP_HOME}/bin/gnustep-config")
 
+if (NOT EXISTS ${GNUSTEP_CONFIG})
+    message(FATAL_ERROR "GNUstep config not found at ${GNUSTEP_CONFIG}.\n"
+        "Please install the GNUstep Android toolchain from\n"
+        "https://github.com/gnustep/tools-android")
+endif()
+
 # get options from gnustep-config
 execute_process(COMMAND ${GNUSTEP_CONFIG} --debug-flags # or --objc-flags
         OUTPUT_VARIABLE OBJECTIVEC_COMPILE_FLAGS
