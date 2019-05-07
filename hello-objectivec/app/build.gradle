@@ -15,8 +15,8 @@ android {
             }
         }
         ndk {
-            // GNUstep currently supports armeabi-v7a only
-            abiFilters "armeabi-v7a"
+            // ABIs supported by GNUstep toolchain
+            abiFilters "armeabi-v7a", "arm64-v8a", "x86", "x86_64"
         }
     }
     buildTypes {
