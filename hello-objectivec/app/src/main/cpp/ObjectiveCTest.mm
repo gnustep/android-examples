@@ -22,7 +22,17 @@
 
 - (NSString *)test
 {
-    return [NSString stringWithFormat:@"Hello NSString from %@", self];
+    NSMutableString *string = [NSMutableString stringWithFormat:@"Hello NSString from %@", self];
+
+    [string appendString:@"\n\nAssets resources:"];
+    [string appendFormat:@"\n- Info.plist app name: %@", [NSBundle.mainBundle objectForInfoDictionaryKey:@"CFBundleDisplayName"]];
+    [string appendFormat:@"\n- Info.plist app version: %@", [NSBundle.mainBundle objectForInfoDictionaryKey:@"CFBundleShortVersionString"]];
+    [string appendFormat:@"\n- Localized string: %@ %@", NSLocalizedString(@"LocalizedString", nil), NSBundle.mainBundle.localizations];
+
+    NSArray *array = [NSArray arrayWithContentsOfFile:[NSBundle.mainBundle pathForResource:@"Array" ofType:@"plist" inDirectory:@"Subfolder"]];
+    [string appendFormat:@"\n- Plist array: %@", [array componentsJoinedByString:@", "]];
+
+    return [string copy];
 }
 
 - (void)throwException
