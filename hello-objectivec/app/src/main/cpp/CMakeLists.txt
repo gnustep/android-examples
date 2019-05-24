@@ -79,6 +79,9 @@ target_link_libraries( # Specifies the target library.
         # included in the NDK.
         ${log-lib}
 
+        # Link Android native application APIs
+        android
+
         # Add linker options for GNUstep
         ${OBJECTIVEC_LINK_OPTIONS})
 

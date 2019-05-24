@@ -18,24 +18,21 @@ static int runLoggingThread();
 // this will be called automatically by the Objective-C runtime
 + (void)load
 {
-    __android_log_write(ANDROID_LOG_DEBUG, LOG_TAG, "Initialize GNUstep");
+    __android_log_write(ANDROID_LOG_DEBUG, LOG_TAG, "Run logging thread");
 
-    NSString *cmdline = [NSString stringWithContentsOfFile:[NSString stringWithFormat:@"/proc/%d/cmdline", getpid()]];
-    NSString *identifier = [[cmdline componentsSeparatedByString:@" "] objectAtIndex:0];
-    NSString *home = [NSString stringWithFormat:@"/data/data/%@", identifier];
-    NSString *exe = [NSString stringWithFormat:@"%@/exe", home];
-    FILE *f = fopen([exe UTF8String], "w"); if(f) fclose(f);
-
-    NSString *path = [NSString stringWithFormat:@"PATH=%@", home];
-    NSString *home2 = [NSString stringWithFormat:@"HOME=%@", home];
-
-    const char *argv[] = { [exe UTF8String], "-GSLogSyslog", "-GSExceptionStackTrace" };
-    const char *env[] = { "USER=android", [home2 UTF8String], [path UTF8String], NULL };
-
-    GSInitializeProcess(sizeof(argv)/sizeof(char *), (char **)argv, (char **)env);
-
-    // enable output of stdout and stderr via logcat to e.g. see messages from NSAssert()
     runLoggingThread();
+}
+
+JNIEXPORT void JNICALL
+Java_com_example_helloobjectivec_MainActivity_initializeGNUstep(JNIEnv *env, jobject this, jobject jassetManager)
+{
+    __android_log_write(ANDROID_LOG_DEBUG, LOG_TAG, "Set Android asset manager");
+
+    // pass asset manager to GNUstep
+    [NSBundle setJavaAssetManager:jassetManager withJNIEnv:env];
+
+    // set supported languages in GNUstep (required for Android)
+    [NSUserDefaults setUserLanguages:@[@"en"]];
 }
 
 @end
