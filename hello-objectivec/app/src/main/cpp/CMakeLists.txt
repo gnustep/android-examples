@@ -11,7 +11,14 @@ set(OBJECTIVEC_SRCS GSInitialize.m ObjectiveCTest.mm)
 
 # Set up Objective-C suppport via GNUstep
 
-set(GNUSTEP_HOME "$ENV{HOME}/Library/Android/GNUStep/${ANDROID_ABI}")
+if (APPLE)
+    set(GNUSTEP_HOME "$ENV{HOME}/Library/Android/GNUstep/${ANDROID_ABI}")
+elseif(UNIX)
+    set(GNUSTEP_HOME "$ENV{HOME}/Android/GNUstep/${ANDROID_ABI}")
+else()
+    message(FATAL_ERROR "Unsupported platform")
+endif()
+
 set(GNUSTEP_CONFIG "${GNUSTEP_HOME}/bin/gnustep-config")
 
 if (NOT EXISTS ${GNUSTEP_CONFIG})
