@@ -7,5 +7,5 @@ Android Studio project using CMake to compile Objective C code using GNUstep.
 The GNUstep integration can be found in [CMakeLists.txt](hello-objectivec/app/src/main/cpp/CMakeLists.txt).  
 Additionaly, [GSInitialize.m](hello-objectivec/app/src/main/cpp/GSInitialize.m) shows how to initialize GNUstep and enables logging of stderr output via logcat.
 * [**hello-objective-qt**](hello-objective-qt)  
-Qt project using a custom compiler definition to support Objective C code using GNUstep.  
+Qt project using a custom compiler definition to support Objective C code using GNUstep (see [objc-gnustep.pri](hello-objective-qt/objc-gnustep.pri)).  
 Can be run on Android as well as macOS.
