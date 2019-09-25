@@ -24,12 +24,12 @@ static int runLoggingThread();
 }
 
 JNIEXPORT void JNICALL
-Java_com_example_helloobjectivec_MainActivity_initializeGNUstep(JNIEnv *env, jobject this, jobject jassetManager)
+Java_com_example_helloobjectivec_MainActivity_initializeGNUstep(JNIEnv *env, jobject this, jobject context)
 {
-    __android_log_write(ANDROID_LOG_DEBUG, LOG_TAG, "Set Android asset manager");
+    __android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, "Initializing GNUstep...");
 
-    // pass asset manager to GNUstep
-    [NSBundle setJavaAssetManager:jassetManager withJNIEnv:env];
+    // initialize GNUstep
+    GSInitializeProcessAndroid(env, context);
 
     // set supported languages in GNUstep (required for Android)
     [NSUserDefaults setUserLanguages:@[@"en"]];

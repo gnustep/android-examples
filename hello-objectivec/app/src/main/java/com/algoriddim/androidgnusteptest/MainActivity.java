@@ -1,5 +1,6 @@
 package com.example.helloobjectivec;
 
+import android.content.Context;
 import android.content.res.AssetManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -15,7 +16,7 @@ public class MainActivity extends AppCompatActivity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		initializeGNUstep(getAssets());
+		initializeGNUstep(this);
 
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
@@ -33,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
 	 * A native method that is implemented by the 'native-lib' native library,
 	 * which is packaged with this application.
 	 */
-	public native void initializeGNUstep(AssetManager assetManager);
+	public native void initializeGNUstep(Context context);
 	public native String stringFromJNI();
 	public native String stringFromObjectiveC();
 	public native void throwObjectiveCException();
