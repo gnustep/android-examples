@@ -26,11 +26,11 @@ static int runLoggingThread();
     __android_log_write(ANDROID_LOG_DEBUG, LOG_TAG, "Initialize GNUstep");
 
     // enable output of stdout and stderr via logcat to e.g. see messages from NSAssert()
-	runLoggingThread();
+    runLoggingThread();
 
-	// initialize GNUstep
-	QAndroidJniEnvironment qjniEnv;
-	GSInitializeProcessAndroid(qjniEnv, QtAndroid::androidActivity().object());
+    // initialize GNUstep
+    QAndroidJniEnvironment qjniEnv;
+    GSInitializeProcessAndroid(qjniEnv, QtAndroid::androidActivity().object());
 }
 
 @end
