@@ -16,8 +16,11 @@ SOURCES += \
     main.cpp
 
 OBJECTIVE_SOURCES += \
-    ObjC.m \
-    ObjCXX.mm \
+    $$files(*.m) \
+    $$files(*.mm) \
+
+HEADERS += \
+    $$files(*.h) \
 
 RESOURCES += qml.qrc
 

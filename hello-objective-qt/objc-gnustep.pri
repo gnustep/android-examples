@@ -28,6 +28,7 @@ LIBS += \
     -lBlocksRuntime \
 
 android {
+    QT += androidextras
     LIBS += -landroid
     ANDROID_EXTRA_LIBS += $$files($${GNUSTEP_LIBRARIES_DIR}/*.so)
 }
