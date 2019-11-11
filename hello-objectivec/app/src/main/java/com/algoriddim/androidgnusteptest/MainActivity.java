@@ -26,8 +26,11 @@ public class MainActivity extends AppCompatActivity {
 		tv.setText(stringFromObjectiveC());
 	}
 
-	public void onThrowObjectiveCException(View v) {
-		throwObjectiveCException();
+	public void onThrowObjCException(View v) {
+		throwObjCException();
+	}
+	public void onThrowObjCXXException(View v) {
+		throwObjCXXException();
 	}
 
 	/**
@@ -37,5 +40,6 @@ public class MainActivity extends AppCompatActivity {
 	public native void initializeGNUstep(Context context);
 	public native String stringFromJNI();
 	public native String stringFromObjectiveC();
-	public native void throwObjectiveCException();
+	public native void throwObjCException();
+	public native void throwObjCXXException();
 }

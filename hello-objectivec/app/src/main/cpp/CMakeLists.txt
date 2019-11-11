@@ -7,7 +7,7 @@ cmake_minimum_required(VERSION 3.4.1)
 
 # Define list of Objective-C/C++ files
 
-set(OBJECTIVEC_SRCS GSInitialize.m ObjectiveCTest.mm)
+set(OBJECTIVEC_SRCS GSInitialize.m ObjC.m ObjCXX.mm)
 
 # Set up Objective-C suppport via GNUstep
 

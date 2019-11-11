@@ -1,10 +1,10 @@
-#import "ObjectiveCTest.h"
+#import "ObjCXX.h"
 
 #include <jni.h>
 
 #define APPNAME "helloobjectivec"
 
-@implementation ObjectiveCTest
+@implementation TestCXX
 
 + (void)initialize
 {
@@ -50,13 +50,13 @@
 extern "C" JNIEXPORT jstring JNICALL
 Java_com_example_helloobjectivec_MainActivity_stringFromObjectiveC(JNIEnv *env, jobject /* this */)
 {
-    NSString *nsString = [[[ObjectiveCTest alloc] init] test];
+    NSString *nsString = [[[TestCXX alloc] init] test];
     const char *cString = [nsString cStringUsingEncoding:NSString.defaultCStringEncoding];
     return env->NewStringUTF(cString);
 }
 
 extern "C" JNIEXPORT void JNICALL
-Java_com_example_helloobjectivec_MainActivity_throwObjectiveCException(JNIEnv *env, jobject /* this */)
+Java_com_example_helloobjectivec_MainActivity_throwObjCXXException(JNIEnv *env, jobject /* this */)
 {
-    [[[ObjectiveCTest alloc] init] throwException];
+    [[[TestCXX alloc] init] throwException];
 }

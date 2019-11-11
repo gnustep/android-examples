@@ -1,4 +1,4 @@
 #import <Foundation/Foundation.h>
 
-@interface ObjectiveCTest : NSObject
+@interface TestCXX : NSObject
 @end
