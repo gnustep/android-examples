@@ -64,9 +64,9 @@ android {
     CLANG_FLAGS += \
         -I$$[QT_HOST_PREFIX]/include/QtAndroidExtras \
 
-    # fix compatibility with NDK r20 (will be fixed in Qt 5.12.5 and 5.13.1)
+    # work around NDK r20 compatibility (fixed with Qt 5.14)
     # https://bugreports.qt.io/browse/QTBUG-76293
-    QMAKE_LFLAGS += -nostdlib++
+    !versionAtLeast(QT_VERSION, "5.14.0"): QMAKE_LFLAGS += -nostdlib++
 }
 
 for(i, INCLUDEPATH) {
