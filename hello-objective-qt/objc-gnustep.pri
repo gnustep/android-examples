@@ -24,6 +24,7 @@ INCLUDEPATH += "$$(GNUSTEP_HOME)/include"
 
 LIBS += \
     $$GNUSTEP_LIBRARIES_FLAGS \
+    -lgnustep-corebase \
     -ldispatch \
     -lBlocksRuntime \
 
