@@ -1,21 +1,19 @@
 android {
-    equals(QMAKE_HOST.os, Darwin):{
-        GNUSTEP_HOME="$$(HOME)/Library/Android/GNUstep/$$ANDROID_TARGET_ARCH"
-    } else:equals(QMAKE_HOST.os, Linux):{
-        GNUSTEP_HOME="$$(HOME)/Android/GNUstep/$$ANDROID_TARGET_ARCH"
-    } else {
-        error(Unsupported platform)
-    }
+    versionAtLeast(QT_VERSION, "5.14.0"): ANDROID_ARCH = $$QT_ARCH
+    else: ANDROID_ARCH = $$ANDROID_TARGET_ARCH
+
+    equals(QMAKE_HOST.os, Darwin): GNUSTEP_HOME = "$$(HOME)/Library/Android/GNUstep/$$ANDROID_ARCH"
+    else:equals(QMAKE_HOST.os, Linux): GNUSTEP_HOME = "$$(HOME)/Android/GNUstep/$$ANDROID_ARCH"
+    else: error(Unsupported platform)
 }
 
-GNUSTEP_CONFIG="$${GNUSTEP_HOME}/bin/gnustep-config"
+GNUSTEP_CONFIG = "$${GNUSTEP_HOME}/bin/gnustep-config"
 
 !exists($$GNUSTEP_CONFIG) {
     error(GNUstep config not found at $${GNUSTEP_CONFIG}. \
         Please install the GNUstep Android toolchain from \
         https://github.com/gnustep/tools-android)
 }
-
 
 GNUSTEP_LIBRARIES_FLAGS = $$system($$GNUSTEP_CONFIG --base-libs)
 GNUSTEP_LIBRARIES_DIR = $$system($$GNUSTEP_CONFIG --variable=GNUSTEP_SYSTEM_LIBRARIES)
@@ -31,7 +29,19 @@ LIBS += \
 android {
     QT += androidextras
     LIBS += -landroid
-    ANDROID_EXTRA_LIBS += $$files($${GNUSTEP_LIBRARIES_DIR}/*.so)
+
+    versionAtLeast(QT_VERSION, "5.14.0") {
+        # add libraries from all architectures
+        for(abi, $$list($$ANDROID_ABIS)) {
+            equals(QMAKE_HOST.os, Darwin): GNUSTEP_ARCH_HOME = "$$(HOME)/Library/Android/GNUstep/$$abi"
+            else:equals(QMAKE_HOST.os, Linux): GNUSTEP_ARCH_HOME = "$$(HOME)/Android/GNUstep/$$abi"
+            GNUSTEP_ARCH_CONFIG = "$${GNUSTEP_ARCH_HOME}/bin/gnustep-config"
+            GNUSTEP_ARCH_LIBRARIES_DIR = $$system($$GNUSTEP_ARCH_CONFIG --variable=GNUSTEP_SYSTEM_LIBRARIES)
+            ANDROID_EXTRA_LIBS += $$files($${GNUSTEP_ARCH_LIBRARIES_DIR}/*.so)
+        }
+    } else {
+        ANDROID_EXTRA_LIBS += $$files($${GNUSTEP_LIBRARIES_DIR}/*.so)
+    }
 }
 
 CONFIG(release, debug|release): \
