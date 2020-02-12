@@ -42,7 +42,7 @@ execute_process(COMMAND ${GNUSTEP_CONFIG} --variable=GNUSTEP_SYSTEM_LIBRARIES
 set(OBJECTIVEC_COMPILE_FLAGS "${OBJECTIVEC_COMPILE_FLAGS} -fobjc-arc")
 
 # add libdispatch
-set(OBJECTIVEC_LINK_OPTIONS "${OBJECTIVEC_LINK_OPTIONS} -ldispatch -lBlocksRuntime")
+set(OBJECTIVEC_LINK_OPTIONS "${OBJECTIVEC_LINK_OPTIONS} -ldispatch")
 
 # set compile flags on Objective-C/C++ files
 set_property(SOURCE ${OBJECTIVEC_SRCS}

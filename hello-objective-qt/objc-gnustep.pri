@@ -24,7 +24,6 @@ LIBS += \
     $$GNUSTEP_LIBRARIES_FLAGS \
     -lgnustep-corebase \
     -ldispatch \
-    -lBlocksRuntime \
 
 android {
     QT += androidextras
