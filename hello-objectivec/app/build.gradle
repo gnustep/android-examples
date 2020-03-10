@@ -11,7 +11,8 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         externalNativeBuild {
             cmake {
-                cppFlags ""
+                // use shared C++ standard library (required by GNUstep libraries)
+                arguments "-DANDROID_STL=c++_shared"
             }
         }
         ndk {
