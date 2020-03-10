@@ -38,7 +38,6 @@ public class MainActivity extends AppCompatActivity {
 	 * which is packaged with this application.
 	 */
 	public native void initializeGNUstep(Context context);
-	public native String stringFromJNI();
 	public native String stringFromObjectiveC();
 	public native void throwObjCException();
 	public native void throwObjCXXException();
