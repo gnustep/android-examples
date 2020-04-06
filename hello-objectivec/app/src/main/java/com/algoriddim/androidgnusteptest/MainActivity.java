@@ -11,6 +11,10 @@ public class MainActivity extends AppCompatActivity {
 
 	// Used to load the 'native-lib' library on application startup.
 	static {
+		// ICU libraries need to be loaded before all others to avoid
+		// missing symbols when loading GNUstep libs at runtime
+		System.loadLibrary("icuuc");
+		System.loadLibrary("icui18n");
 		System.loadLibrary("native-lib");
 	}
 

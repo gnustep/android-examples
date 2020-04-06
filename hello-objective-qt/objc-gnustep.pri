@@ -36,10 +36,26 @@ android {
             else:equals(QMAKE_HOST.os, Linux): GNUSTEP_ARCH_HOME = "$$(HOME)/Android/GNUstep/$$abi"
             GNUSTEP_ARCH_CONFIG = "$${GNUSTEP_ARCH_HOME}/bin/gnustep-config"
             GNUSTEP_ARCH_LIBRARIES_DIR = $$system($$GNUSTEP_ARCH_CONFIG --variable=GNUSTEP_SYSTEM_LIBRARIES)
-            ANDROID_EXTRA_LIBS += $$files($${GNUSTEP_ARCH_LIBRARIES_DIR}/*.so)
+            GNUSTEP_LIBS = $$files($${GNUSTEP_ARCH_LIBRARIES_DIR}/*.so)
+
+            # ICU libraries need to be loaded before all others
+            ICU_LIBS = \
+                $${GNUSTEP_ARCH_LIBRARIES_DIR}/libicuuc.so \
+                $${GNUSTEP_ARCH_LIBRARIES_DIR}/libicui18n.so \
+                $${GNUSTEP_ARCH_LIBRARIES_DIR}/libicudata.so
+            GNUSTEP_LIBS -= $${ICU_LIBS}
+            ANDROID_EXTRA_LIBS += $${ICU_LIBS} $${GNUSTEP_LIBS}
         }
     } else {
-        ANDROID_EXTRA_LIBS += $$files($${GNUSTEP_LIBRARIES_DIR}/*.so)
+        GNUSTEP_LIBS = $$files($${GNUSTEP_LIBRARIES_DIR}/*.so)
+
+        # ICU libraries need to be loaded before all others
+        ICU_LIBS = \
+            $${GNUSTEP_LIBRARIES_DIR}/libicuuc.so \
+            $${GNUSTEP_LIBRARIES_DIR}/libicui18n.so \
+            $${GNUSTEP_LIBRARIES_DIR}/libicudata.so
+        GNUSTEP_LIBS -= $${ICU_LIBS}
+        ANDROID_EXTRA_LIBS += $${ICU_LIBS} $${GNUSTEP_LIBS}
     }
 }
 
