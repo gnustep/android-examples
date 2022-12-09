@@ -3,13 +3,19 @@
 
 #include <pthread.h>
 #include <unistd.h>
+#include <stdio.h>
 
 #include <android/log.h>
-
 #include <Foundation/Foundation.h>
+#include <QtGlobal>
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 #include <QtAndroid>
 #include <QAndroidJniEnvironment>
+#else
+#include <QCoreApplication>
+#include <QJniEnvironment>
+#endif
 
 static const char *LOG_TAG = "GNUstep";
 
@@ -29,8 +35,13 @@ static int runLoggingThread();
     runLoggingThread();
 
     // initialize GNUstep
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     QAndroidJniEnvironment qjniEnv;
     GSInitializeProcessAndroid(qjniEnv, QtAndroid::androidActivity().object());
+#else
+	QJniEnvironment qjniEnv;
+	GSInitializeProcessAndroid(qjniEnv.jniEnv(), (jobject)QNativeInterface::QAndroidApplication::context());
+#endif
 }
 
 @end

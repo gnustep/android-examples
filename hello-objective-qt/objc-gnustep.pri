@@ -26,10 +26,10 @@ LIBS += \
     -ldispatch \
 
 android {
-    QT += androidextras
     LIBS += -landroid
+	equals(QT_MAJOR_VERSION, 5): QT += androidextras
 
-    versionAtLeast(QT_VERSION, "5.14.0") {
+    equals(QT_MAJOR_VERSION, 5):versionAtLeast(QT_VERSION, "5.14.0") {
         # add libraries from all architectures
         for(abi, $$list($$ANDROID_ABIS)) {
             equals(QMAKE_HOST.os, Darwin): GNUSTEP_ARCH_HOME = "$$(HOME)/Library/Android/GNUstep/$$abi"
@@ -60,24 +60,14 @@ android {
 }
 
 CONFIG(release, debug|release): \
-    CLANG_FLAGS += $$system($$GNUSTEP_CONFIG --objc-flags)
+    QMAKE_OBJECTIVE_CFLAGS += $$system($$GNUSTEP_CONFIG --objc-flags)
 else: \
-    CLANG_FLAGS += $$system($$GNUSTEP_CONFIG --debug-flags)
+    QMAKE_OBJECTIVE_CFLAGS += $$system($$GNUSTEP_CONFIG --debug-flags)
 
 QMAKE_LFLAGS += -Wl,--no-as-needed
 
-CLANG_FLAGS += \
-    -I$$[QT_HOST_PREFIX]/include \
-    -I$$[QT_HOST_PREFIX]/include/QtCore \
-    -I$$[QT_HOST_PREFIX]/include/QtQuick \
-    -I$$[QT_HOST_PREFIX]/include/QtWidgets \
-    -I$$[QT_HOST_PREFIX]/include/QtGui \
-    -I$$[QT_HOST_PREFIX]/include/QtQml \
-    -I$$[QT_HOST_PREFIX]/include/QtNetwork \
-
 android {
-    CLANG_FLAGS += \
-        -I$$[QT_HOST_PREFIX]/include/QtAndroidExtras \
+    equals(QT_MAJOR_VERSION, 5): CLANG_FLAGS += -I$$[QT_HOST_PREFIX]/include/QtAndroidExtras
 
     # work around NDK r20 compatibility (fixed with Qt 5.14)
     # https://bugreports.qt.io/browse/QTBUG-76293
@@ -98,6 +88,6 @@ clang_objc.input = OBJECTIVE_SOURCES
 clang_objc.dependency_type = TYPE_C
 clang_objc.variable_out = OBJECTS
 clang_objc.output = ${QMAKE_VAR_OBJECTS_DIR}${QMAKE_FILE_IN_BASE}$${first(QMAKE_EXT_OBJ)}
-clang_objc.commands = $${QMAKE_CC} $${QMAKE_CXXFLAGS} $${CLANG_FLAGS} $${CLANG_DEBUG_FLAGS} -Wall -Wno-unused-parameter -fobjc-arc -fPIC -o ${QMAKE_FILE_OUT} -c ${QMAKE_FILE_IN}
+clang_objc.commands = $(if $(filter ${QMAKE_FILE_EXT}, .mm), $(CXX) -c $(CXXFLAGS), $(CC) -c $(CFLAGS)) $${QMAKE_OBJECTIVE_CFLAGS} $(INCPATH) -o ${QMAKE_FILE_OUT} ${QMAKE_FILE_IN}
 
 QMAKE_EXTRA_COMPILERS += clang_objc
