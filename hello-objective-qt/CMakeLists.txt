@@ -1,10 +1,8 @@
-cmake_minimum_required(VERSION 3.16)
+cmake_minimum_required(VERSION 3.18)
 
 project(hello_objective_qt VERSION 1.0 LANGUAGES CXX) # NOT OBJC OBJCXX
 
-if(ANDROID)
-	include(gnustep-android.cmake)
-endif()
+include(objc-gnustep.cmake)
 
 # enable Objective-C languages after including gnustep-android.cmake
 enable_language(OBJC)
@@ -17,12 +15,16 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Gui Quick)
 
 qt_standard_project_setup()
 
-qt_add_executable(hello_objective_qt MACOSX_BUNDLE
+set(SOURCES
 	main.cpp
-	GSInitialize.mm
 	ObjC.m
 	ObjCXX.mm
 )
+if(ANDROID)
+	list(APPEND SOURCES GSInitialize.mm)
+endif()
+
+qt_add_executable(hello_objective_qt WIN32 MACOSX_BUNDLE ${SOURCES})
 
 qt_add_resources(hello_objective_qt "qml"
 	PREFIX "/"
@@ -43,6 +45,10 @@ if(ANDROID)
 
     set_target_properties(hello_objective_qt PROPERTIES
 		QT_ANDROID_EXTRA_LIBS "${GNUSTEP_LIBRARY_PATHS}"
+	)
+elseif(WIN32)
+	target_link_libraries(hello_objective_qt PRIVATE
+		${GNUSTEP_LIBRARY_PATHS}
 	)
 endif()
 
