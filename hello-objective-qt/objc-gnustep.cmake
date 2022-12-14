@@ -59,7 +59,11 @@ elseif(WIN32)
 	# https://github.com/gnustep/tools-windows-msvc/releases
 	set(GNUSTEP_ROOT "C:/GNUstep" CACHE FILEPATH "GNUstep Windows MSVC root directory")
 
-	set(GNUSTEP_HOME "${GNUSTEP_ROOT}/${MSVC_CXX_ARCHITECTURE_ID}/Release")
+	if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+		set(GNUSTEP_HOME ${GNUSTEP_ROOT}/${MSVC_CXX_ARCHITECTURE_ID}/Debug)
+	else()
+		set(GNUSTEP_HOME ${GNUSTEP_ROOT}/${MSVC_CXX_ARCHITECTURE_ID}/Release)
+	endif()
 	list(APPEND CMAKE_PREFIX_PATH ${GNUSTEP_HOME})
 
 	# set flags and work around Objective-C compiler detection issues on Windows
