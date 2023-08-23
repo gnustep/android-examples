@@ -95,6 +95,6 @@ target_link_libraries( # Specifies the target library.
 # Copy GNUstep libraries into output directory to be bundled with the app.
 
 add_custom_command(TARGET native-lib POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
         ${OBJECTIVEC_LIBRARIES_DIR}/*.so
         ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/)
